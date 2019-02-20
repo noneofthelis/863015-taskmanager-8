@@ -1,8 +1,10 @@
+`use strict`
+
 const filtersContainer = document.querySelector(`.main__filter`);
 const cardsContainer = document.querySelector(`.board__tasks`);
 const filtersNames = [`all`, `overdue`, `today`, `favorites`, `repeating`, `tags`, `archive`];
 
-const generateRandomNumber = (min, max) => Math.floor(Math.random() * (max - min + 1) ) + min;
+const generateRandomNumber = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
 const getFilterTemplate = (name, number, isChecked) => {
   const state = number ? isChecked : `disabled`;
@@ -13,10 +15,10 @@ const getFilterTemplate = (name, number, isChecked) => {
     ${state} />
     <label for="filter__${name}" class="filter__label">${name}
     <span class="filter__${name}-count">${number}</span></label>`;
-}
+};
 
-const getCardTemplate = () => 
-    `<article class="card card--pink card--repeat">
+const getCardTemplate = () =>
+  `<article class="card card--pink card--repeat">
     <form class="card__form" method="get">
       <div class="card__inner">
         <div class="card__control">
@@ -315,13 +317,13 @@ const renderFilters = (array) => {
     const isChecked = index ? `` : `checked`;
     filtersContainer.insertAdjacentHTML(`beforeend`, getFilterTemplate(element, randomNumber, isChecked));
   });
-}
+};
 
 const renderCards = (number) => {
-  for(let i = 0; i < number; i++) {
+  for (let i = 0; i < number; i++) {
     cardsContainer.insertAdjacentHTML(`beforeend`, getCardTemplate());
   }
-}
+};
 
 const toggleFilter = (evt) => {
   filtersContainer.querySelector(`input[type="radio"]:checked`).checked = false;
@@ -332,7 +334,7 @@ const onFilterClick = (evt) => {
   toggleFilter(evt);
   cardsContainer.innerHTML = ``;
   renderCards(generateRandomNumber(1, 12));
-}
+};
 
 filtersContainer.addEventListener(`click`, onFilterClick);
 
