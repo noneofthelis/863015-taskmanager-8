@@ -1,4 +1,5 @@
-`use strict`
+/*eslint strict: ["error", "global"]*/
+`use strict`;
 
 const filtersContainer = document.querySelector(`.main__filter`);
 const cardsContainer = document.querySelector(`.board__tasks`);
