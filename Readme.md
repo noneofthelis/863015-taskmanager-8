@@ -1,7 +1,7 @@
 # Личный проект «Менеджер задач» [![Build status][travis-image]][travis-url]
 
 * Студент: [Alisa Ianovskaia](https://up.htmlacademy.ru/ecmascript/8/user/863015).
-* Наставник: `Неизвестно`.
+* Наставник: `Юрий Катков`.
 
 ---
 
