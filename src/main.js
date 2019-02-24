@@ -1,23 +1,33 @@
 import makeFilter from './make-filter.js';
 import makeTask from './make-task.js';
 
+const FilterInterval = {
+  MIN: 0,
+  MAX: 20
+};
+
+const TasksNumber = {
+  INITIAL: 7,
+  RANDOM_MIN: 1,
+  RANDOM_MAX: 12
+};
+
 const filtersContainer = document.querySelector(`.main__filter`);
-const cardsContainer = document.querySelector(`.board__tasks`);
+const tasksContainer = document.querySelector(`.board__tasks`);
 const filtersNames = [`all`, `overdue`, `today`, `favorites`, `repeating`, `tags`, `archive`];
 
 const generateRandomNumber = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
 const renderFilters = (array) => {
   array.forEach((element, index) => {
-    const randomNumber = generateRandomNumber(0, 20);
-    const isChecked = index ? `` : `checked`;
-    filtersContainer.insertAdjacentHTML(`beforeend`, makeFilter(element, randomNumber, isChecked));
+    filtersContainer.insertAdjacentHTML(`beforeend`, makeFilter(element,
+        generateRandomNumber(FilterInterval.MIN, FilterInterval.MAX), index ? `` : `checked`));
   });
 };
 
 const renderTasks = (number) => {
   for (let i = 0; i < number; i++) {
-    cardsContainer.insertAdjacentHTML(`beforeend`, makeTask());
+    tasksContainer.insertAdjacentHTML(`beforeend`, makeTask());
   }
 };
 
@@ -28,11 +38,11 @@ const toggleFilter = (evt) => {
 
 const onFilterClick = (evt) => {
   toggleFilter(evt);
-  cardsContainer.innerHTML = ``;
-  renderTasks(generateRandomNumber(1, 12));
+  tasksContainer.innerHTML = ``;
+  renderTasks(generateRandomNumber(TasksNumber.RANDOM_MIN, TasksNumber.RANDOM_MAX));
 };
 
 filtersContainer.addEventListener(`click`, onFilterClick);
 
 renderFilters(filtersNames);
-renderTasks(7);
+renderTasks(TasksNumber.INITIAL);
