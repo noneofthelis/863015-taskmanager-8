@@ -18,6 +18,10 @@ const filtersNames = [`all`, `overdue`, `today`, `favorites`, `repeating`, `tags
 
 const generateRandomNumber = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
+const generateTasksArray = (number) => {
+  return [...new Array(number)].map(() => makeTask());
+};
+
 const renderFilters = (array) => {
   array.forEach((element, index) => {
     filtersContainer.insertAdjacentHTML(`beforeend`, makeFilter(element,
@@ -25,10 +29,10 @@ const renderFilters = (array) => {
   });
 };
 
-const renderTasks = (number) => {
-  for (let i = 0; i < number; i++) {
-    tasksContainer.insertAdjacentHTML(`beforeend`, makeTask());
-  }
+const renderTasks = (array) => {
+  array.forEach((element) => {
+    tasksContainer.insertAdjacentHTML(`beforeend`, element);
+  });
 };
 
 const toggleFilter = (evt) => {
@@ -39,10 +43,10 @@ const toggleFilter = (evt) => {
 const onFilterClick = (evt) => {
   toggleFilter(evt);
   tasksContainer.innerHTML = ``;
-  renderTasks(generateRandomNumber(TasksNumber.RANDOM_MIN, TasksNumber.RANDOM_MAX));
+  renderTasks(generateTasksArray(generateRandomNumber(TasksNumber.RANDOM_MIN, TasksNumber.RANDOM_MAX)));
 };
 
 filtersContainer.addEventListener(`click`, onFilterClick);
 
 renderFilters(filtersNames);
-renderTasks(TasksNumber.INITIAL);
+renderTasks(generateTasksArray(TasksNumber.INITIAL));
