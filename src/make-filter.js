@@ -1,3 +1,12 @@
+/** @module ./make-filter */
+
+/**
+ * returns markup of filter element template
+ * @param {string} name
+ * @param {number} number
+ * @param {boolean} isChecked
+ * @return {string}
+ */
 export default (name, number, isChecked) => {
   return `<input type="radio" 
     id="filter__${name}"

@@ -1,3 +1,9 @@
+/** @module ./make-task */
+
+/**
+ * returns markup of task element template
+ * @return {string}
+ */
 export default () =>
   `<article class="card card--pink card--repeat">
     <form class="card__form" method="get">

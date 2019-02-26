@@ -16,12 +16,27 @@ const filtersContainer = document.querySelector(`.main__filter`);
 const tasksContainer = document.querySelector(`.board__tasks`);
 const filtersNames = [`all`, `overdue`, `today`, `favorites`, `repeating`, `tags`, `archive`];
 
+/**
+ * returns random number between min and max inclusive
+ * @param {number} min
+ * @param {number} max
+ * @return {number}
+ */
 const getRandomNumber = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
+/**
+ * returns an array of certain number of task element templates
+ * @param {number} number
+ * @return {string[]}
+ */
 const generateTasksArray = (number) => {
   return [...new Array(number)].map(() => makeTask());
 };
 
+/**
+ * inserts the resulting nodes (filter elements) into the DOM tree
+ * @param {Array.<string>} array
+ */
 const renderFilters = (array) => {
   array.forEach((element, index) => {
     filtersContainer.insertAdjacentHTML(`beforeend`, makeFilter(element,
@@ -29,17 +44,29 @@ const renderFilters = (array) => {
   });
 };
 
+/**
+ * inserts the resulting nodes (tasks elements) into the DOM tree
+ * @param {Array.<string>} array
+ */
 const renderTasks = (array) => {
   array.forEach((element) => {
     tasksContainer.insertAdjacentHTML(`beforeend`, element);
   });
 };
 
+/**
+ * toggles checked filter
+ * @param {MouseEvent} evt
+ */
 const toggleFilter = (evt) => {
   filtersContainer.querySelector(`input[type="radio"]:checked`).checked = false;
   evt.target.checked = true;
 };
 
+/**
+ * on click event toggles checked filter and refreshes tasks
+ * @param {MouseEvent} evt
+ */
 const onFilterClick = (evt) => {
   toggleFilter(evt);
   tasksContainer.innerHTML = ``;
