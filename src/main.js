@@ -16,7 +16,7 @@ const filtersContainer = document.querySelector(`.main__filter`);
 const tasksContainer = document.querySelector(`.board__tasks`);
 const filtersNames = [`all`, `overdue`, `today`, `favorites`, `repeating`, `tags`, `archive`];
 
-const generateRandomNumber = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+const getRandomNumber = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
 const generateTasksArray = (number) => {
   return [...new Array(number)].map(() => makeTask());
@@ -25,7 +25,7 @@ const generateTasksArray = (number) => {
 const renderFilters = (array) => {
   array.forEach((element, index) => {
     filtersContainer.insertAdjacentHTML(`beforeend`, makeFilter(element,
-        generateRandomNumber(FilterInterval.MIN, FilterInterval.MAX), index ? `` : `checked`));
+        getRandomNumber(FilterInterval.MIN, FilterInterval.MAX), index ? `` : `checked`));
   });
 };
 
@@ -43,7 +43,7 @@ const toggleFilter = (evt) => {
 const onFilterClick = (evt) => {
   toggleFilter(evt);
   tasksContainer.innerHTML = ``;
-  renderTasks(generateTasksArray(generateRandomNumber(TasksNumber.RANDOM_MIN, TasksNumber.RANDOM_MAX)));
+  renderTasks(generateTasksArray(getRandomNumber(TasksNumber.RANDOM_MIN, TasksNumber.RANDOM_MAX)));
 };
 
 filtersContainer.addEventListener(`click`, onFilterClick);
