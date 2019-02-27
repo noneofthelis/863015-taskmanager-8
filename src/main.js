@@ -38,12 +38,10 @@ const generateTasksArray = (number) => {
  * @param {Array.<string>} array
  */
 const renderFilters = (array) => {
-  const fragment = document.createDocumentFragment();
   array.forEach((element, index) => {
-    fragment.appendChild(makeFilter(element,
+    filtersContainer.insertAdjacentHTML(`beforeend`, makeFilter(element,
         getRandomNumber(FilterInterval.MIN, FilterInterval.MAX), index ? `` : `checked`));
   });
-  filtersContainer.appendChild(fragment);
 };
 
 /**
@@ -51,11 +49,9 @@ const renderFilters = (array) => {
  * @param {Array.<string>} array
  */
 const renderTasks = (array) => {
-  const fragment = document.createDocumentFragment();
   array.forEach((element) => {
-    fragment.appendChild(element);
+    tasksContainer.insertAdjacentHTML(`beforeend`, element);
   });
-  tasksContainer.appendChild(fragment);
 };
 
 /**

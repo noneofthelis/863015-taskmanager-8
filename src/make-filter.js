@@ -8,19 +8,11 @@
  * @return {string}
  */
 export default (name, number, isChecked) => {
-  const template = document.querySelector(`#filter-template`).content;
-  const fragment = document.createDocumentFragment();
-  const element = template.cloneNode(true);
-  const label = element.querySelector(`label`);
-  const span = element.querySelector(`span`);
-
-  element.id = `filter__${name}`;
-  label.setAttribute(`for`, `filter__${name}`);
-  label.textContent = name;
-  span.classList.add(`filter__${name}-count`);
-  span.textContent = number;
-  element.setAttribute(`checked`, number ? isChecked : `disabled`);
-  fragment.appendChild(element);
-
-  return fragment;
+  return `<input type="radio" 
+    id="filter__${name}"
+    class="filter__input visually-hidden"
+    name="filter"
+    ${number ? isChecked : `disabled`} />
+    <label for="filter__${name}" class="filter__label">${name}
+    <span class="filter__${name}-count">${number}</span></label>`;
 };
