@@ -1,6 +1,8 @@
 import makeFilter from './make-filter.js';
 import makeTask from './make-task.js';
 
+const ENTER_KEYCODE = 13;
+
 const FilterInterval = {
   MIN: 0,
   MAX: 20
@@ -35,23 +37,31 @@ const generateTasksArray = (number) => {
 
 /**
  * inserts the resulting nodes (filter elements) into the DOM tree
- * @param {Array.<string>} array
+ * @param {Array.<Node>} elements
  */
-const renderFilters = (array) => {
-  array.forEach((element, index) => {
-    filtersContainer.insertAdjacentHTML(`beforeend`, makeFilter(element,
-        getRandomNumber(FilterInterval.MIN, FilterInterval.MAX), index ? `` : `checked`));
+const renderFilters = (elements) => {
+  const fragment = document.createDocumentFragment();
+  let wasChecked = false;
+  elements.forEach((element) => {
+    const number = getRandomNumber(FilterInterval.MIN, FilterInterval.MAX);
+    fragment.appendChild(makeFilter(element, number, !wasChecked && number));
+    if (!wasChecked && number) {
+      wasChecked = true;
+    }
   });
+  filtersContainer.appendChild(fragment);
 };
 
 /**
  * inserts the resulting nodes (tasks elements) into the DOM tree
- * @param {Array.<string>} array
+ * @param {Array.<Node>} elements
  */
-const renderTasks = (array) => {
-  array.forEach((element) => {
-    tasksContainer.insertAdjacentHTML(`beforeend`, element);
+const renderTasks = (elements) => {
+  const fragment = document.createDocumentFragment();
+  elements.forEach((element) => {
+    fragment.appendChild(element);
   });
+  tasksContainer.appendChild(fragment);
 };
 
 /**
@@ -59,21 +69,36 @@ const renderTasks = (array) => {
  * @param {MouseEvent} evt
  */
 const toggleFilter = (evt) => {
-  filtersContainer.querySelector(`input[type="radio"]:checked`).checked = false;
-  evt.target.checked = true;
+  const targetEl = evt.target;
+  if (targetEl.classList.contains(`filter__label`)) {
+    const selector = targetEl.getAttribute(`for`);
+    filtersContainer.querySelector(`input[type="radio"]:checked`).checked = false;
+    filtersContainer.querySelector(`#${selector}`).checked = true;
+  }
 };
 
 /**
- * on click event toggles checked filter and refreshes tasks
- * @param {MouseEvent} evt
+ * creates a random number of tasks
  */
-const onFilterClick = (evt) => {
-  toggleFilter(evt);
+const refreshTasks = () => {
   tasksContainer.innerHTML = ``;
   renderTasks(generateTasksArray(getRandomNumber(TasksNumber.RANDOM_MIN, TasksNumber.RANDOM_MAX)));
 };
 
+const onFilterClick = (evt) => {
+  toggleFilter(evt);
+  refreshTasks();
+};
+
+const onFilterPress = (evt) => {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    toggleFilter(evt);
+    refreshTasks();
+  }
+};
+
 filtersContainer.addEventListener(`click`, onFilterClick);
+filtersContainer.addEventListener(`keypress`, onFilterPress);
 
 renderFilters(filtersNames);
 renderTasks(generateTasksArray(TasksNumber.INITIAL));

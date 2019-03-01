@@ -5,14 +5,25 @@
  * @param {string} name
  * @param {number} number
  * @param {boolean} isChecked
- * @return {string}
+ * @return {Node}
  */
 export default (name, number, isChecked) => {
-  return `<input type="radio" 
-    id="filter__${name}"
-    class="filter__input visually-hidden"
-    name="filter"
-    ${number ? isChecked : `disabled`} />
-    <label for="filter__${name}" class="filter__label">${name}
-    <span class="filter__${name}-count">${number}</span></label>`;
+  const element = document.querySelector(`#filter-template`).content.cloneNode(true);
+  const fragment = document.createDocumentFragment();
+  const label = element.querySelector(`label`);
+  const span = element.querySelector(`span`);
+  const input = element.querySelector(`input`);
+
+  label.setAttribute(`for`, `filter__${name}`);
+  label.insertAdjacentText(`afterbegin`, name);
+  span.classList.add(`filter__${name}-count`);
+  span.textContent = number;
+  input.id = `filter__${name}`;
+  input.disabled = !number;
+  if (isChecked) {
+    input.checked = true;
+  }
+  fragment.appendChild(element);
+
+  return fragment;
 };
