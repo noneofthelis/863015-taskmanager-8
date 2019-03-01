@@ -1,5 +1,7 @@
 "use strict";
 
+const ENTER_KEYCODE = 13;
+
 const FilterInterval = {
   MIN: 0,
   MAX: 20
@@ -34,15 +36,20 @@ const getFilterTemplate = (name, number, isChecked) => {
   const template = document.querySelector(`#filter-template`).content;
   const fragment = document.createDocumentFragment();
   const element = template.cloneNode(true);
+  const input = element.querySelector(`input`);
   const label = element.querySelector(`label`);
   const span = element.querySelector(`span`);
 
-  element.id = `filter__${name}`;
   label.setAttribute(`for`, `filter__${name}`);
-  label.textContent = name;
+  label.insertAdjacentText(`afterbegin`, name);
   span.classList.add(`filter__${name}-count`);
   span.textContent = number;
-  element.setAttribute(`checked`, number ? isChecked : `disabled`);
+  input.id = `filter__${name}`;
+  input.disabled = !number;
+  if (isChecked) {
+    input.checked = true;
+  }
+
   fragment.appendChild(element);
 
   return fragment;
@@ -53,7 +60,7 @@ const getFilterTemplate = (name, number, isChecked) => {
  * @return {Node}
  */
 const getCardTemplate = () => {
-  const template = document.querySelector(`#task-template`).content;
+  const template = document.querySelector(`#task-template`).content.cloneNode(true);
   const fragment = document.createDocumentFragment();
   fragment.appendChild(template);
   return fragment;
@@ -70,24 +77,28 @@ const generateTasksArray = (number) => {
 
 /**
  * inserts the resulting nodes (filter elements) into the DOM tree
- * @param {Array.<string>} array
+ * @param {Array.<Node>} elements
  */
-const renderFilters = (array) => {
+const renderFilters = (elements) => {
   const fragment = document.createDocumentFragment();
-  array.forEach((element, index) => {
-    fragment.appendChild(getFilterTemplate(element,
-        getRandomNumber(FilterInterval.MIN, FilterInterval.MAX), index ? `` : `checked`));
+  let wasChecked = false;
+  elements.forEach((element) => {
+    const number = getRandomNumber(FilterInterval.MIN, FilterInterval.MAX);
+    fragment.appendChild(getFilterTemplate(element, number, !wasChecked && number));
+    if (!wasChecked && number) {
+      wasChecked = true;
+    }
   });
   filtersContainer.appendChild(fragment);
 };
 
 /**
  * inserts the resulting nodes (tasks elements) into the DOM tree
- * @param {Array.<string>} array
+ * @param {Array.<Node>} elements
  */
-const renderTasks = (array) => {
+const renderTasks = (elements) => {
   const fragment = document.createDocumentFragment();
-  array.forEach((element) => {
+  elements.forEach((element) => {
     fragment.appendChild(element);
   });
   tasksContainer.appendChild(fragment);
@@ -98,21 +109,36 @@ const renderTasks = (array) => {
  * @param {MouseEvent} evt
  */
 const toggleFilter = (evt) => {
-  filtersContainer.querySelector(`input[type="radio"]:checked`).checked = false;
-  evt.target.checked = true;
+  const targetEl = evt.target;
+  if (targetEl.classList.contains(`filter__label`)) {
+    const selector = targetEl.getAttribute(`for`);
+    filtersContainer.querySelector(`input[type="radio"]:checked`).checked = false;
+    filtersContainer.querySelector(`#${selector}`).checked = true;
+  }
 };
 
 /**
- * on click event toggles checked filter and refreshes tasks
- * @param {MouseEvent} evt
+ * creates a random number of tasks
  */
-const onFilterClick = (evt) => {
-  toggleFilter(evt);
+const refreshTasks = () => {
   tasksContainer.innerHTML = ``;
   renderTasks(generateTasksArray(getRandomNumber(TasksNumber.RANDOM_MIN, TasksNumber.RANDOM_MAX)));
 };
 
+const onFilterClick = (evt) => {
+  toggleFilter(evt);
+  refreshTasks();
+};
+
+const onFilterPress = (evt) => {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    toggleFilter(evt);
+    refreshTasks();
+  }
+};
+
 filtersContainer.addEventListener(`click`, onFilterClick);
+filtersContainer.addEventListener(`keypress`, onFilterPress);
 
 renderFilters(filtersNames);
 renderTasks(generateTasksArray(TasksNumber.INITIAL));
