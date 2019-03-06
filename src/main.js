@@ -27,12 +27,14 @@ const filtersNames = [`all`, `overdue`, `today`, `favorites`, `repeating`, `tags
 const getRandomNumber = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
 /**
+
  * returns an array of certain number of task element templates
  * @param {number} number
  * @return {string[]}
  */
 const generateTasksArray = (number) => {
   return [...new Array(number)].map(() => makeTask());
+
 };
 
 /**
@@ -45,6 +47,7 @@ const renderFilters = (elements) => {
   elements.forEach((element) => {
     const number = getRandomNumber(FilterInterval.MIN, FilterInterval.MAX);
     fragment.appendChild(makeFilter(element, number, !wasChecked && number));
+    
     if (!wasChecked && number) {
       wasChecked = true;
     }
