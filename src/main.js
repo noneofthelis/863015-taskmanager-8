@@ -1,8 +1,7 @@
 import makeFilter from './make-filter.js';
 import makeTask from './make-task.js';
-import task from './data.js';
-
-console.log(task);
+// import task from './data.js';
+import getRandomNumber from './util.js';
 
 const ENTER_KEYCODE = 13;
 
@@ -21,13 +20,7 @@ const filtersContainer = document.querySelector(`.main__filter`);
 const tasksContainer = document.querySelector(`.board__tasks`);
 const filtersNames = [`all`, `overdue`, `today`, `favorites`, `repeating`, `tags`, `archive`];
 
-/**
- * returns random number between min and max inclusive
- * @param {number} min
- * @param {number} max
- * @return {number}
- */
-const getRandomNumber = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
 
 /**
 
