@@ -1,5 +1,8 @@
 import makeFilter from './make-filter.js';
 import makeTask from './make-task.js';
+import task from './data.js';
+
+console.log(task);
 
 const ENTER_KEYCODE = 13;
 
