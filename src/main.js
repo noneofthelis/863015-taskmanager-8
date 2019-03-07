@@ -1,4 +1,5 @@
-"use strict";
+import makeFilter from './make-filter.js';
+import makeTask from './make-task.js';
 
 const ENTER_KEYCODE = 13;
 
@@ -26,53 +27,14 @@ const filtersNames = [`all`, `overdue`, `today`, `favorites`, `repeating`, `tags
 const getRandomNumber = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
 /**
- * returns markup of filter element template
- * @param {string} name
- * @param {number} number
- * @param {boolean} isChecked
- * @return {Node}
- */
-const getFilterTemplate = (name, number, isChecked) => {
-  const template = document.querySelector(`#filter-template`).content;
-  const fragment = document.createDocumentFragment();
-  const element = template.cloneNode(true);
-  const input = element.querySelector(`input`);
-  const label = element.querySelector(`label`);
-  const span = element.querySelector(`span`);
 
-  label.setAttribute(`for`, `filter__${name}`);
-  label.insertAdjacentText(`afterbegin`, name);
-  span.classList.add(`filter__${name}-count`);
-  span.textContent = number;
-  input.id = `filter__${name}`;
-  input.disabled = !number;
-  if (isChecked) {
-    input.checked = true;
-  }
-
-  fragment.appendChild(element);
-
-  return fragment;
-};
-
-/**
- * returns markup of task element template
- * @return {Node}
- */
-const getCardTemplate = () => {
-  const template = document.querySelector(`#task-template`).content.cloneNode(true);
-  const fragment = document.createDocumentFragment();
-  fragment.appendChild(template);
-  return fragment;
-};
-
-/**
  * returns an array of certain number of task element templates
  * @param {number} number
  * @return {string[]}
  */
 const generateTasksArray = (number) => {
-  return [...new Array(number)].map(() => getCardTemplate());
+  return [...new Array(number)].map(() => makeTask());
+
 };
 
 /**
@@ -84,7 +46,7 @@ const renderFilters = (elements) => {
   let wasChecked = false;
   elements.forEach((element) => {
     const number = getRandomNumber(FilterInterval.MIN, FilterInterval.MAX);
-    fragment.appendChild(getFilterTemplate(element, number, !wasChecked && number));
+    fragment.appendChild(makeFilter(element, number, !wasChecked && number));
     if (!wasChecked && number) {
       wasChecked = true;
     }
