@@ -47,7 +47,6 @@ const renderFilters = (elements) => {
   elements.forEach((element) => {
     const number = getRandomNumber(FilterInterval.MIN, FilterInterval.MAX);
     fragment.appendChild(makeFilter(element, number, !wasChecked && number));
-    
     if (!wasChecked && number) {
       wasChecked = true;
     }
