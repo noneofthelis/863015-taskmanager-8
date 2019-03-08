@@ -1,6 +1,7 @@
 import makeFilter from './make-filter.js';
 import makeTask from './make-task.js';
-// import task from './data.js';
+import task from './data.js';
+
 import getRandomNumber from './util.js';
 
 const ENTER_KEYCODE = 13;
@@ -20,8 +21,6 @@ const filtersContainer = document.querySelector(`.main__filter`);
 const tasksContainer = document.querySelector(`.board__tasks`);
 const filtersNames = [`all`, `overdue`, `today`, `favorites`, `repeating`, `tags`, `archive`];
 
-
-
 /**
 
  * returns an array of certain number of task element templates
@@ -29,8 +28,7 @@ const filtersNames = [`all`, `overdue`, `today`, `favorites`, `repeating`, `tags
  * @return {string[]}
  */
 const generateTasksArray = (number) => {
-  return [...new Array(number)].map(() => makeTask());
-
+  return [...new Array(number)].map(() => makeTask(task));
 };
 
 /**
