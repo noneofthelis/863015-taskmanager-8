@@ -10,9 +10,10 @@ export default (task) =>{
   const fragment = document.createDocumentFragment();
   const card = template.querySelector(`.card`);
   const details = card.querySelector(`.card__details`);
+  const daysOfWeek = Object.keys(task.repeatingDays);
   const tags = task.RandomTags;
 
-  card.classList.add(`card--${task.color}`);
+  card.classList.add(`card--${task.randomColour}`);
   details.querySelector(`.card__img-wrap`).insertAdjacentHTML(`beforeend`,
       `<img src="${task.picture}" alt="task picture" class="card__img">`);
   card.querySelector(`.card__date`).setAttribute(`placeholder`, task.dueDate);
@@ -27,7 +28,14 @@ export default (task) =>{
       container.appendChild(templ);
     }
   }
+  for (let day of daysOfWeek) {
+    if (task.repeatingDays[day]) {
+      details.querySelector(`input[value="${day}"]`).setAttribute(`checked`, ``);
+    }
+    // details.querySelector(`input[value="${day}"]`).checked = task.repeatingDays[day]; - не работает
+  }
 
+  console.log(task.isDone);
   fragment.appendChild(template);
 
   return fragment;
