@@ -34,7 +34,7 @@ export default (task) =>{
     }
     // details.querySelector(`input[value="${day}"]`).checked = task.repeatingDays[day]; - не работает
   }
-  
+
   fragment.appendChild(template);
 
   return fragment;
