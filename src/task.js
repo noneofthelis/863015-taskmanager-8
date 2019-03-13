@@ -20,8 +20,8 @@ export default class Task {
   }
 
   _onEditButtonClick() {
-    if (typeof this._onSubmit === `function`) {
-      this._onSubmit();
+    if (typeof this._onEdit === `function`) {
+      this._onEdit();
     }
   }
 

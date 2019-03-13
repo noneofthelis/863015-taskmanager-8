@@ -1,7 +1,7 @@
 import makeFilter from './make-filter.js';
+import data from './data.js';
 import Task from './task.js';
 import TaskEdit from './task-edit.js';
-import data from './data.js';
 
 import util from './util.js';
 
