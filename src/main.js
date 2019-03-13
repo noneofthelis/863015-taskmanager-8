@@ -1,8 +1,9 @@
 import makeFilter from './make-filter.js';
-import makeTask from './make-task.js';
-import task from './data.js';
+import Task from './task.js';
+import TaskEdit from './task-edit.js';
+import data from './data.js';
 
-import getRandomNumber from './util.js';
+import util from './util.js';
 
 const ENTER_KEYCODE = 13;
 
@@ -22,13 +23,35 @@ const tasksContainer = document.querySelector(`.board__tasks`);
 const filtersNames = [`all`, `overdue`, `today`, `favorites`, `repeating`, `tags`, `archive`];
 
 /**
-
  * returns an array of certain number of task element templates
  * @param {number} number
  * @return {string[]}
  */
 const generateTasksArray = (number) => {
-  return [...new Array(number)].map(() => makeTask(task));
+  return [...new Array(number)].map(renderComponents);
+};
+
+/**
+ * creates task and task-edit components
+ */
+const renderComponents = () => {
+
+  const taskComponent = new Task(data);
+  const editTaskComponent = new TaskEdit(data);
+
+  tasksContainer.appendChild(taskComponent.render());
+
+  taskComponent.onEdit = () => {
+    editTaskComponent.render();
+    tasksContainer.replaceChild(editTaskComponent.element, taskComponent.element);
+    taskComponent.unrender();
+  };
+
+  editTaskComponent.onSubmit = () => {
+    taskComponent.render();
+    tasksContainer.replaceChild(taskComponent.element, editTaskComponent.element);
+    editTaskComponent.unrender();
+  };
 };
 
 /**
@@ -39,25 +62,13 @@ const renderFilters = (elements) => {
   const fragment = document.createDocumentFragment();
   let wasChecked = false;
   elements.forEach((element) => {
-    const number = getRandomNumber(FilterInterval.MIN, FilterInterval.MAX);
+    const number = util.getRandomNumber(FilterInterval.MIN, FilterInterval.MAX);
     fragment.appendChild(makeFilter(element, number, !wasChecked && number));
     if (!wasChecked && number) {
       wasChecked = true;
     }
   });
   filtersContainer.appendChild(fragment);
-};
-
-/**
- * inserts the resulting nodes (tasks elements) into the DOM tree
- * @param {Array.<Node>} elements
- */
-const renderTasks = (elements) => {
-  const fragment = document.createDocumentFragment();
-  elements.forEach((element) => {
-    fragment.appendChild(element);
-  });
-  tasksContainer.appendChild(fragment);
 };
 
 /**
@@ -78,7 +89,7 @@ const toggleFilter = (evt) => {
  */
 const refreshTasks = () => {
   tasksContainer.innerHTML = ``;
-  renderTasks(generateTasksArray(getRandomNumber(TasksNumber.RANDOM_MIN, TasksNumber.RANDOM_MAX)));
+  generateTasksArray(util.getRandomNumber(TasksNumber.RANDOM_MIN, TasksNumber.RANDOM_MAX));
 };
 
 const onFilterClick = (evt) => {
@@ -97,4 +108,4 @@ filtersContainer.addEventListener(`click`, onFilterClick);
 filtersContainer.addEventListener(`keypress`, onFilterPress);
 
 renderFilters(filtersNames);
-renderTasks(generateTasksArray(TasksNumber.INITIAL));
+generateTasksArray(TasksNumber.INITIAL);
