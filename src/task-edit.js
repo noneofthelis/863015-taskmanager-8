@@ -1,0 +1,92 @@
+/** @module ./task */
+
+export default class TaskEdit {
+  constructor(data) {
+    this._title = data.randomTitle;
+    this._dueDate = data.dueDate;
+    this._tags = data.randomTags;
+    this._picture = data.picture;
+    this._colour = data.randomColour;
+    this._repeatingDays = data.repeatingDays;
+
+    this._element = null;
+    this._onSubmit = null;
+
+    this._state = {
+      isEdit: false
+    };
+  }
+
+  _isRepeating() {
+    return Object.values(this._repeatingDays).some((it) => it === true);
+  }
+
+  _onSubmitButtonClick(evt) {
+    evt.preventDefault();
+    if (typeof this._onSubmit === `function`) {
+      this._onSubmit();
+    }
+  }
+
+  render() {
+    this._element = this.template;
+    this.bind();
+
+    return this._element;
+  }
+
+  unrender() {
+    this.unbind();
+    this._element = null;
+  }
+
+  bind() {
+    this._element.querySelector(`.card__save`)
+      .addEventListener(`click`, this._onSubmitButtonClick.bind(this));
+  }
+
+  unbind() {
+    this._element.querySelector(`.card__save`)
+      .removeEventListener(`click`, this._onSubmitButtonClick.bind(this));
+  }
+
+  get element() {
+    return this._element;
+  }
+
+  get template() {
+    const template = document.querySelector(`#task-edit-template`).content
+      .cloneNode(true).querySelector(`.card`);
+    const details = template.querySelector(`.card__details`);
+    const daysOfWeek = Object.keys(this._repeatingDays);
+
+    template.querySelector(`.card__text`).textContent = this._title;
+    template.classList.add(`card--${this._colour}`);
+    template.querySelector(`.card__date`).setAttribute(`placeholder`, this._dueDate);
+    details.querySelector(`.card__img-wrap`).insertAdjacentHTML(`beforeend`,
+        `<img src="${this._picture}" alt="task picture" class="card__img">`);
+
+    if (this._isRepeating()) {
+      template.classList.add(`card--repeat`);
+    }
+    if (this._tags.length) {
+      for (const tag of this._tags) {
+        const hashtagTemplate = document.querySelector(`#hashtag-template`).content.cloneNode(true);
+        hashtagTemplate.querySelector(`.card__hashtag-name`).textContent = tag;
+        template.querySelector(`.card__hashtag-list`).appendChild(hashtagTemplate);
+      }
+    }
+    for (let day of daysOfWeek) {
+      if (this._repeatingDays[day]) {
+        details.querySelector(`input[value="${day}"]`).setAttribute(`checked`, ``);
+      }
+    }
+
+    return template;
+  }
+
+  set onSubmit(fn) {
+    this._onSubmit = fn;
+  }
+}
+
