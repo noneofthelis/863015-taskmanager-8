@@ -1,7 +1,11 @@
 /** @module ./task */
 
-export default class TaskEdit {
+import Component from './component.js';
+
+export default class TaskEdit extends Component {
+
   constructor(data) {
+    super();
     this._title = data.randomTitle;
     this._dueDate = data.dueDate;
     this._tags = data.randomTags;
@@ -9,12 +13,8 @@ export default class TaskEdit {
     this._colour = data.randomColour;
     this._repeatingDays = data.repeatingDays;
 
-    this._element = null;
     this._onSubmit = null;
-
-    this._state = {
-      isEdit: false
-    };
+    this._onSubmitButtonClick = this._onSubmitButtonClick.bind(this);
   }
 
   _isRepeating() {
@@ -28,24 +28,12 @@ export default class TaskEdit {
     }
   }
 
-  render() {
-    this._element = this.template;
-    this.bind();
-
-    return this._element;
-  }
-
-  unrender() {
-    this.unbind();
-    this._element = null;
-  }
-
-  bind() {
+  createListeners() {
     this._element.querySelector(`.card__save`)
       .addEventListener(`click`, this._onSubmitButtonClick.bind(this));
   }
 
-  unbind() {
+  removeListeners() {
     this._element.querySelector(`.card__save`)
       .removeEventListener(`click`, this._onSubmitButtonClick.bind(this));
   }

@@ -1,18 +1,18 @@
 /** @module ./task */
 
-export default class Task {
+import Component from './component.js';
+
+export default class Task extends Component {
   constructor(data) {
+    super();
     this._title = data.randomTitle;
     this._tags = data.randomTags;
     this._colour = data.randomColour;
     this._repeatingDays = data.repeatingDays;
 
-    this._element = null;
     this._onEdit = null;
 
-    this._state = {
-      isEdit: false
-    };
+    this._onEditButtonClick = this._onEditButtonClick.bind(this);
   }
 
   _isRepeating() {
@@ -25,30 +25,14 @@ export default class Task {
     }
   }
 
-  render() {
-    this._element = this.template;
-    this.bind();
-
-    return this._element;
-  }
-
-  unrender() {
-    this.unbind();
-    this._element = null;
-  }
-
-  bind() {
+  createListeners() {
     this._element.querySelector(`.card__btn--edit`)
-      .addEventListener(`click`, this._onEditButtonClick.bind(this));
+      .addEventListener(`click`, this._onEditButtonClick);
   }
 
-  unbind() {
+  removeListeners() {
     this._element.querySelector(`.card__btn--edit`)
-      .removeEventListener(`click`, this._onEditButtonClick.bind(this));
-  }
-
-  get element() {
-    return this._element;
+      .removeEventListener(`click`, this._onEditButtonClick);
   }
 
   get template() {
