@@ -24,6 +24,8 @@ export default class Component {
 
   removeListeners() {}
 
+  update() {}
+
   get element() {
     return this._element;
   }

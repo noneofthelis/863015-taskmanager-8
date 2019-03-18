@@ -35,6 +35,13 @@ export default class Task extends Component {
       .removeEventListener(`click`, this._onEditButtonClick);
   }
 
+  update(newData) {
+    this._title = newData.title;
+    this._tags = newData.tags;
+    this._colour = newData.colour;
+    this._repeatingDays = newData.repeatingDays;
+  }
+
   get template() {
     const template = document.querySelector(`#task-template`).content
       .cloneNode(true).querySelector(`.card`);

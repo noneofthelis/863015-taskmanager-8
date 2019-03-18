@@ -52,6 +52,7 @@ const renderComponents = () => {
     tasksContainer.replaceChild(taskComponent.element, editTaskComponent.element);
     editTaskComponent.unrender();
   };
+
 };
 
 /**

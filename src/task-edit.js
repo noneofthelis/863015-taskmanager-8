@@ -28,14 +28,32 @@ export default class TaskEdit extends Component {
     }
   }
 
+  static _onColourClick(evt) {
+    if (evt.target.tagName === `INPUT`) {
+      const item = evt.target.closest(`.card`);
+      const colorClass = item.classList[2];
+      item.classList.remove(colorClass);
+      item.classList.add(`card--${evt.target.value}`);
+    }
+  }
+  _onChangeDate() {
+
+  }
+
+  _onChangeRepeated() {
+
+  }
+
   createListeners() {
     this._element.querySelector(`.card__save`)
-      .addEventListener(`click`, this._onSubmitButtonClick.bind(this));
+      .addEventListener(`click`, this._onSubmitButtonClick);
+    this._element.querySelector(`.card__colors-wrap`)
+      .addEventListener(`click`, this._onColourClick);
   }
 
   removeListeners() {
     this._element.querySelector(`.card__save`)
-      .removeEventListener(`click`, this._onSubmitButtonClick.bind(this));
+      .removeEventListener(`click`, this._onSubmitButtonClick);
   }
 
   get element() {
