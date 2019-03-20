@@ -47,6 +47,7 @@ export default class Task extends Component {
       .cloneNode(true).querySelector(`.card`);
 
     template.querySelector(`.card__text`).textContent = this._title;
+    template.querySelector(`.card__text`).setAttribute(`readonly`, `true`);
     template.classList.add(`card--${this._colour}`);
 
     if (this._isRepeating()) {

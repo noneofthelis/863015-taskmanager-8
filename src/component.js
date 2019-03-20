@@ -6,7 +6,7 @@ export default class Component {
       throw new Error(`Can't instantiate BaseComponent, only concrete one.`);
     }
     this._element = null;
-    this.state = {};
+    this._state = {};
   }
 
   render() {

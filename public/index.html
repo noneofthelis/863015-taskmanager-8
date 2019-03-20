@@ -201,7 +201,7 @@
 </template>
 <template id="task-edit-template">
   <article class="card card--edit">
-    <form class="card__form" method="get">
+    <form class="card__form" method="post">
       <div class="card__inner">
         <div class="card__control">
           <button type="button" class="card__btn card__btn--edit">
@@ -329,7 +329,7 @@
                   >sa</label
                   >
                   <input
-                    class="card__repeat-day-input"
+                    class="visually-hidden card__repeat-day-input"
                     type="checkbox"
                     id="repeat-su-2"
                     name="repeat"
@@ -436,6 +436,7 @@
             <button class="card__delete" type="button">delete</button>
           </div>
         </div>
+      </div>
     </form>
   </article>
 </template>
@@ -463,6 +464,6 @@
      </button>
    </span>
 </template>
-<script src="./bundle.js"></script>
+<script src="../src/main.js" type="module"></script>
 </body>
 </html>
