@@ -1,11 +1,12 @@
 /** @module ./task */
 
 import Component from './component.js';
+import flatpickr from 'flatpickr';
 
 export default class TaskEdit extends Component {
 
   constructor(data) {
-    super(); // засунуть сюда update
+    super();
     this._title = data.randomTitle;
     this._dueDate = data.dueDate;
     this._tags = data.randomTags;
@@ -28,21 +29,19 @@ export default class TaskEdit extends Component {
 
   _onSubmitButtonClick(evt) {
     evt.preventDefault();
-
     const formData = new FormData(this._element.querySelector(`.card__form`));
     const newData = this._processForm(formData);
     if (typeof this._onSubmit === `function`) {
-      this._onSubmit();
+      this._onSubmit(newData);
     }
-
     this.update(newData);
   }
 
   _processForm(formData) {
     const entry = {
       title: ``,
-      color: ``,
-      tags: new Set(),
+      colour: ``,
+      tags: [],
       dueDate: new Date(),
       repeatingDays: {
         'mo': false,
@@ -68,11 +67,24 @@ export default class TaskEdit extends Component {
 
   static createMapper(target) {
     return {
-      hashtag: (value) => target.tags.add(value),
-      text: (value) => target.title = value,
-      color: (value) => target.color = value,
-      repeat: (value) => target.repeatingDays[value] = true,
-      date: (value) => target.dueDate[value],
+      hashtag: (value) => target.tags.push(value),
+      hashtagInput: (value) => {
+        if (value) {
+          target.tags.push(`#${value}`);
+        }
+      },
+      date: (value) => {
+        target.dueDate = value;
+      },
+      text: (value) => {
+        target.title = value;
+      },
+      color: (value) => {
+        target.colour = value;
+      },
+      repeat: (value) => {
+        target.repeatingDays[value] = true;
+      }
     };
   }
 
@@ -88,6 +100,7 @@ export default class TaskEdit extends Component {
     this._state.isDate = !this._state.isDate;
     this.removeListeners();
     this._partialUpdate(evt.target.closest(`.card`));
+    this._addFlatpicker();
     this.createListeners();
   }
 
@@ -96,6 +109,13 @@ export default class TaskEdit extends Component {
     this.removeListeners();
     this._partialUpdate(evt.target.closest(`.card`));
     this.createListeners();
+  }
+
+  _addFlatpicker() {
+    if (this._state.isDate) {
+      flatpickr(`.card__date`, {altInput: true, altFormat: `j F`, dateFormat: `Y-m-d`});
+      flatpickr(`.card__time`, {enableTime: true, noCalendar: true, altInput: true, altFormat: `h:i K`, dateFormat: `h:i K`});
+    }
   }
 
   createListeners() {
@@ -121,11 +141,11 @@ export default class TaskEdit extends Component {
   }
 
   update(data) {
-    this._title = data.randomTitle;
+    this._title = data.title;
     this._dueDate = data.dueDate;
-    this._tags = data.randomTags;
+    this._tags = data.tags;
     this._picture = data.picture;
-    this._colour = data.randomColour;
+    this._colour = data.colour;
     this._repeatingDays = data.repeatingDays;
   }
 
@@ -136,6 +156,10 @@ export default class TaskEdit extends Component {
 
   get element() {
     return this._element;
+  }
+
+  get state() {
+    return this._state;
   }
 
   get template() {
@@ -149,6 +173,7 @@ export default class TaskEdit extends Component {
     details.querySelector(`.card__date-deadline`).disabled = !this._state.isDate;
     details.querySelector(`.card__date-status`).textContent = this._state.isDate ? `yes` : `no`;
     details.querySelector(`.card__repeat-days`).disabled = !this._state.isRepeated;
+    details.querySelector(`.card__repeat-status`).textContent = this._state.isRepeated ? `yes` : `no`;
     details.querySelector(`.card__img-wrap`).insertAdjacentHTML(`beforeend`,
         `<img src="${this._picture}" alt="task picture" class="card__img">`);
 
@@ -162,6 +187,7 @@ export default class TaskEdit extends Component {
       for (const tag of this._tags) {
         const hashtagTemplate = document.querySelector(`#hashtag-template`).content.cloneNode(true);
         hashtagTemplate.querySelector(`.card__hashtag-name`).textContent = tag;
+        hashtagTemplate.querySelector(`input[name="hashtag"]`).value = tag;
         template.querySelector(`.card__hashtag-list`).appendChild(hashtagTemplate);
       }
     }

@@ -48,13 +48,10 @@ const renderComponents = () => {
   };
 
   editTaskComponent.onSubmit = (newObject) => {
-    data.title = newObject.title;
-    data.tags = newObject.tags;
-    data.color = newObject.color;
-    data.repeatingDays = newObject.repeatingDays;
-    data.dueDate = newObject.dueDate;
+    Object.assign(data, newObject);
 
     taskComponent.update(data);
+    taskComponent.updateState(editTaskComponent.state);
     taskComponent.render();
     tasksContainer.replaceChild(taskComponent.element, editTaskComponent.element);
     editTaskComponent.unrender();

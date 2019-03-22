@@ -1,6 +1,7 @@
 /** @module ./task */
 
 import Component from './component.js';
+import moment from 'moment';
 
 export default class Task extends Component {
   constructor(data) {
@@ -11,6 +12,8 @@ export default class Task extends Component {
     this._repeatingDays = data.repeatingDays;
 
     this._onEdit = null;
+    this._state.isDate = false;
+    this._state.isRepeated = false;
 
     this._onEditButtonClick = this._onEditButtonClick.bind(this);
   }
@@ -40,6 +43,11 @@ export default class Task extends Component {
     this._tags = newData.tags;
     this._colour = newData.colour;
     this._repeatingDays = newData.repeatingDays;
+    this._dueDate = newData.dueDate;
+  }
+
+  updateState(state) {
+    this._state = state;
   }
 
   get template() {
@@ -52,6 +60,10 @@ export default class Task extends Component {
 
     if (this._isRepeating()) {
       template.classList.add(`card--repeat`);
+    }
+
+    if (this._state.isDate) {
+      template.querySelector(`.card__dates`).textContent = moment(this._dueDate).format(`D MMMM YYYY HH:MM`);
     }
     if (this._tags.length) {
       for (const tag of this._tags) {
