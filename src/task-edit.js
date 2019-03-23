@@ -2,13 +2,15 @@
 
 import Component from './component.js';
 import flatpickr from 'flatpickr';
+// eslint-disable-next-line no-unused-vars
+import css from 'flatpickr/dist/flatpickr.css';
 
 export default class TaskEdit extends Component {
 
   constructor(data) {
     super();
     this._title = data.randomTitle;
-    this._dueDate = data.dueDate;
+    this._dueDate = data.formatedDate;
     this._tags = data.randomTags;
     this._picture = data.picture;
     this._colour = data.randomColour;
@@ -76,6 +78,9 @@ export default class TaskEdit extends Component {
       date: (value) => {
         target.dueDate = value;
       },
+      time: (value) => {
+        target.dueDate += ` ${value}`;
+      },
       text: (value) => {
         target.title = value;
       },
@@ -100,7 +105,6 @@ export default class TaskEdit extends Component {
     this._state.isDate = !this._state.isDate;
     this.removeListeners();
     this._partialUpdate(evt.target.closest(`.card`));
-    this._addFlatpicker();
     this.createListeners();
   }
 
@@ -109,13 +113,6 @@ export default class TaskEdit extends Component {
     this.removeListeners();
     this._partialUpdate(evt.target.closest(`.card`));
     this.createListeners();
-  }
-
-  _addFlatpicker() {
-    if (this._state.isDate) {
-      flatpickr(`.card__date`, {altInput: true, altFormat: `j F`, dateFormat: `Y-m-d`});
-      flatpickr(`.card__time`, {enableTime: true, noCalendar: true, altInput: true, altFormat: `h:i K`, dateFormat: `h:i K`});
-    }
   }
 
   createListeners() {
@@ -160,6 +157,17 @@ export default class TaskEdit extends Component {
 
   get state() {
     return this._state;
+  }
+
+  render() {
+    super.render();
+    this._addFlatpickr();
+    return this._element;
+  }
+
+  _addFlatpickr() {
+    flatpickr(this._element.querySelector(`.card__date`), {altInput: true, altFormat: `j F`, dateFormat: `Y-m-d`});
+    flatpickr(this._element.querySelector(`.card__time`), {enableTime: true, noCalendar: true, altInput: true, altFormat: `h:i K`, dateFormat: `h:i K`});
   }
 
   get template() {

@@ -63,7 +63,7 @@ export default class Task extends Component {
     }
 
     if (this._state.isDate) {
-      template.querySelector(`.card__dates`).textContent = moment(this._dueDate).format(`D MMMM YYYY HH:MM`);
+      template.querySelector(`.card__dates`).textContent = moment(this._dueDate).format(`D MMMM YYYY HH:mm`);
     }
     if (this._tags.length) {
       for (const tag of this._tags) {

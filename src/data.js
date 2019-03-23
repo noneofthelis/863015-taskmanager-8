@@ -59,5 +59,8 @@ export default {
   },
   get randomTitle() {
     return this.titles[util.getRandomNumber(FIRST_ARRAY_ELEM, this.titles.length - 1)];
+  },
+  get formatedDate() {
+    return this.dueDate.slice(0, 10);
   }
 };

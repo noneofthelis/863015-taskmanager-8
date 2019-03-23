@@ -5,6 +5,10 @@ import TaskEdit from './task-edit.js';
 
 import util from './util.js';
 
+// 1. разбить рендеринг и работу с компонентами на 2 ф-ии, отрефакторить
+// 2. дебажить this в момент смены компонента
+// 3. исправить true при выборе даты
+
 const ENTER_KEYCODE = 13;
 
 const FilterInterval = {
