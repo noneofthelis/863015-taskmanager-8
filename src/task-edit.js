@@ -31,6 +31,7 @@ export default class TaskEdit extends Component {
 
   _onSubmitButtonClick(evt) {
     evt.preventDefault();
+
     const formData = new FormData(this._element.querySelector(`.card__form`));
     const newData = this._processForm(formData);
     if (typeof this._onSubmit === `function`) {

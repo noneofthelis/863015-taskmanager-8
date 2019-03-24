@@ -457,7 +457,7 @@ body {
 .card--edit .card__details {
   display: flex;
   flex-direction: column;
-  order: 2;
+  order: 0;
   margin-bottom: 10px;
 }
 .card--edit .card__time,

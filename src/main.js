@@ -6,7 +6,6 @@ import TaskEdit from './task-edit.js';
 import util from './util.js';
 
 // 1. разбить рендеринг и работу с компонентами на 2 ф-ии, отрефакторить
-// 2. дебажить this в момент смены компонента
 // 3. исправить true при выборе даты
 
 const ENTER_KEYCODE = 13;
@@ -32,19 +31,18 @@ const filtersNames = [`all`, `overdue`, `today`, `favorites`, `repeating`, `tags
  * @return {string[]}
  */
 const generateTasksArray = (number) => {
-  return [...new Array(number)].map(renderComponents);
+  return [...new Array(number)].map(() => {
+    const task1 = renderTask();
+    appendTask(task1);
+    setHandlers(task1, renderTaskEdit());
+  });
 };
 
 /**
  * creates task and task-edit components
  */
-const renderComponents = () => {
 
-  const taskComponent = new Task(data);
-  const editTaskComponent = new TaskEdit(data);
-
-  tasksContainer.appendChild(taskComponent.render());
-
+const setHandlers = (taskComponent, editTaskComponent) => {
   taskComponent.onEdit = () => {
     editTaskComponent.render();
     tasksContainer.replaceChild(editTaskComponent.element, taskComponent.element);
@@ -60,7 +58,18 @@ const renderComponents = () => {
     tasksContainer.replaceChild(taskComponent.element, editTaskComponent.element);
     editTaskComponent.unrender();
   };
+};
 
+const appendTask = (taskComponent) => {
+  tasksContainer.appendChild(taskComponent.render());
+};
+
+const renderTask = () => {
+  return new Task(data);
+};
+
+const renderTaskEdit = () => {
+  return new TaskEdit(data);
 };
 
 /**

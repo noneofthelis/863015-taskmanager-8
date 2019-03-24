@@ -39,6 +39,7 @@ export default class Task extends Component {
   }
 
   update(newData) {
+
     this._title = newData.title;
     this._tags = newData.tags;
     this._colour = newData.colour;
